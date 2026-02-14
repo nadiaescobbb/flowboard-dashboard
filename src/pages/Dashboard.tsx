@@ -1,87 +1,67 @@
-import { useMemo } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { Header } from '../components/Header';
 import { KPICard } from '../components/KPICard';
 import { RevenueChart } from '../components/RevenueChart';
 import { AcquisitionChart } from '../components/AcquisitionChart';
 import { UserTable } from '../components/UserTable';
-import { useTheme } from '../contexts/ThemeContext';
-import {
-  kpiCardsLight,
-  kpiCardsDark,
-  usersLight,
-  usersDark,
-  acquisitionChannelsLight,
-  acquisitionChannelsDark,
-  revenueDataLight,
-  revenueDataDark,
-} from '../data/mockData';
+import { DashboardSkeleton } from '../components/DashboardSkeleton';
+import { ErrorState } from '../components/ErrorState';
+import { useDashboardData } from '../hooks/useDashboardData';
 
 export const Dashboard = () => {
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
+  const { data, isLoading, error, refetch } = useDashboardData();
 
-  
-  const kpiCards = useMemo(
-    () => (isLight ? kpiCardsLight : kpiCardsDark),
-    [isLight]
-  );
+  // Loading state
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
-  const users = useMemo(
-    () => (isLight ? usersLight : usersDark),
-    [isLight]
-  );
+  // Error state
+  if (error) {
+    return <ErrorState error={error as Error} onRetry={() => refetch()} />;
+  }
 
-  const channels = useMemo(
-    () => (isLight ? acquisitionChannelsLight : acquisitionChannelsDark),
-    [isLight]
-  );
-
-  const revenueData = useMemo(
-    () => (isLight ? revenueDataLight : revenueDataDark),
-    [isLight]
-  );
+  // Success state
+  if (!data) return null;
 
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      
+
       <main className="flex-1" role="main" aria-label="Dashboard content">
         <Header />
 
         <div className="p-8 space-y-8">
-          
-          {/* KPI Cards Section */}
+          {/* KPI Cards */}
           <section aria-labelledby="kpi-section-title">
             <h2 id="kpi-section-title" className="sr-only">
               Key Performance Indicators
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {kpiCards.map((card) => (
+              {data.kpiCards.map((card) => (
                 <KPICard key={card.id} card={card} />
               ))}
             </div>
           </section>
 
-          {/* Charts Section */}
+          {/* Charts */}
           <section aria-labelledby="charts-section-title">
             <h2 id="charts-section-title" className="sr-only">
               Analytics Charts
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <RevenueChart data={revenueData} />
-              <AcquisitionChart channels={channels} />
+              <RevenueChart data={data.revenueData} />
+              <AcquisitionChart channels={data.channels} />
             </div>
           </section>
 
-          {/* Users Table Section */}
+          {/* Users Table */}
           <section aria-labelledby="users-section-title">
             <h2 id="users-section-title" className="sr-only">
               Recent Users
             </h2>
-            <UserTable users={users} />
+            <UserTable users={data.users} />
           </section>
-          
         </div>
       </main>
     </div>

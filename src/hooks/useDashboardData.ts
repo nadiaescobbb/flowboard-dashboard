@@ -1,45 +1,14 @@
-// hooks/useDashboardData.ts
-import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '../contexts/ThemeContext';
-import {
-  kpiCardsLight,
-  kpiCardsDark,
-  usersLight,
-  usersDark,
-  acquisitionChannelsLight,
-  acquisitionChannelsDark,
-  revenueDataLight,
-  revenueDataDark,
-} from '../data/mockData';
+import { fetchDashboardData } from '../api/dashboard';
 
 export const useDashboardData = () => {
   const { theme } = useTheme();
-  const isLight = theme === 'light';
 
-  const kpiCards = useMemo(
-    () => (isLight ? kpiCardsLight : kpiCardsDark),
-    [isLight]
-  );
-
-  const users = useMemo(
-    () => (isLight ? usersLight : usersDark),
-    [isLight]
-  );
-
-  const channels = useMemo(
-    () => (isLight ? acquisitionChannelsLight : acquisitionChannelsDark),
-    [isLight]
-  );
-
-  const revenueData = useMemo(
-    () => (isLight ? revenueDataLight : revenueDataDark),
-    [isLight]
-  );
-
-  return {
-    kpiCards,
-    users,
-    channels,
-    revenueData,
-  };
+  return useQuery({
+    queryKey: ['dashboard', theme],
+    queryFn: () => fetchDashboardData(theme),
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    retry: 2,
+  });
 };
