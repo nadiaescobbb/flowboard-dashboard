@@ -1,5 +1,5 @@
 import { User } from '../types';
-import { Icon } from '../../Icon';
+import { Icon } from './Icon';
 
 interface UserTableProps {
   users: User[];
@@ -9,8 +9,8 @@ interface UserTableProps {
 export const UserTable = ({ users, theme }: UserTableProps) => {
   const isLight = theme === 'light';
 
-  const getStatusColor = (status: User['status']) => {
-    const colors = {
+  const getStatusColor = (status: User['status']): string => {
+    const colors: Record<User['status'], string> = {
       Active: isLight
         ? 'bg-emerald-50 text-emerald-600'
         : 'bg-emerald-500/10 text-emerald-500',

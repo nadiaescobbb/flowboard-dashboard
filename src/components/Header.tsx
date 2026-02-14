@@ -1,4 +1,4 @@
-import { Icon } from '../../Icon';
+import { Icon } from './Icon';
 
 interface HeaderProps {
   theme: 'light' | 'dark';

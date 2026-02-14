@@ -1,4 +1,4 @@
-import { Icon } from '../../Icon';
+import { Icon } from './Icon';
 
 interface SidebarProps {
   theme: 'light' | 'dark';
