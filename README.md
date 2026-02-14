@@ -1,6 +1,6 @@
 # 🎯 FlowBoard - Modern Analytics Dashboard
 
-> Production-ready SaaS dashboard with real-time data fetching, built with React 18, TypeScript, and TailwindCSS
+> Production-ready frontend architecture with scalable data fetching patterns, built with React 18, TypeScript, and TailwindCSS
 
 [![Live Demo](https://img.shields.io/badge/demo-live-success?style=for-the-badge)](https://flowboard-rouge.vercel.app)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -23,7 +23,7 @@
 <img src="./screenshots/dashboard-mobile.png" width="375" alt="Mobile View">
 
 ### Loading States
-![Loading Skeleton](images/dashboard-loading.png.png)
+![Loading Skeleton](images/dashboard-loading.png)
 
 ---
 
