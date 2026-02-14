@@ -1,89 +1,123 @@
+import { memo, useMemo } from 'react';
 import { Icon } from './Icon';
 import { KPICard as KPICardType } from '../types';
+import { useThemeClasses } from '../hooks/useThemeClasses';
 
 interface KPICardProps {
   card: KPICardType;
-  theme: 'light' | 'dark';
 }
 
-export const KPICard = ({ card, theme }: KPICardProps) => {
-  const isLight = theme === 'light';
-  const isUp = card.trend === 'up';
+// Mapa de iconos por ID (más eficiente que condicionales)
+const ICON_MAP: Record<string, string> = {
+  '1': 'trending_up',
+  '2': 'group',
+  '3': 'speed',
+  '4': 'shopping_cart',
+};
 
-  const bgClass = isLight
-    ? 'bg-surface-light border-border-light'
-    : 'bg-surface-dark border-border-dark';
+// Componente separado para el sparkline (mejor separación de responsabilidades)
+interface SparklineSVGProps {
+  data: number[];
+  color: string;
+}
 
-  const labelClass = isLight
-    ? 'text-text-secondary-light'
-    : 'text-text-secondary-dark';
+const SparklineSVG = memo(({ data, color }: SparklineSVGProps) => {
+  const pathData = useMemo(() => {
+    if (!data || data.length === 0) return '';
+    
+    const points = data
+      .map((val, i) => `L ${(i + 1) * (100 / data.length)} ${val}`)
+      .join(' ');
+    
+    return `M0 ${data[0]} ${points}`;
+  }, [data]);
 
-  const valueClass = isLight
-    ? 'text-text-primary-light'
-    : 'text-white';
-
-  const trendColor = isUp
-    ? 'text-emerald-500'
-    : 'text-rose-500';
-
-  const SparklineSVG = () => (
-    <svg className="w-full h-full" viewBox="0 0 100 40">
+  return (
+    <svg 
+      className="w-full h-full" 
+      viewBox="0 0 100 40"
+      role="img"
+      aria-label="Trend chart"
+    >
       <path
-        d={`M0 ${card.chartData[0]} ${card.chartData
-          .map(
-            (val, i) =>
-              `L ${(i + 1) * (100 / card.chartData.length)} ${val}`
-          )
-          .join(' ')}`}
+        d={pathData}
         fill="none"
-        stroke={card.chartColor}
+        stroke={color}
         strokeLinecap="round"
         strokeWidth="2"
       />
     </svg>
   );
+});
+
+SparklineSVG.displayName = 'SparklineSVG';
+
+export const KPICard = memo(({ card }: KPICardProps) => {
+  const classes = useThemeClasses();
+  const isUp = card.trend === 'up';
+  
+  // Determinar el icono basado en el ID
+  const iconName = ICON_MAP[card.id] || 'bar_chart';
+  
+  // Color del trend (memoizado para evitar re-cálculos)
+  const trendColor = useMemo(
+    () => (isUp ? 'text-emerald-500' : 'text-rose-500'),
+    [isUp]
+  );
 
   return (
-    <div className={`rounded-xl p-5 border transition-all group hover:border-primary/30 ${bgClass}`}>
+    <article 
+      className={`rounded-xl p-5 border transition-all group hover:border-primary/30 hover:shadow-lg ${classes.surface}`}
+      aria-labelledby={`kpi-${card.id}-label`}
+    >
       
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <p className={`text-sm font-medium ${labelClass}`}>
+        <h3 
+          id={`kpi-${card.id}-label`}
+          className={`text-sm font-medium ${classes.subtitle}`}
+        >
           {card.label}
-        </p>
+        </h3>
 
         <Icon
-          name={
-            card.id === '4'
-              ? 'shopping_cart'
-              : card.id === '1'
-              ? 'trending_up'
-              : card.id === '2'
-              ? 'group'
-              : 'speed'
-          }
-          className="text-primary !text-xl opacity-0 group-hover:opacity-100 transition-opacity"
+          name={iconName}
+          className="text-primary !text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          aria-hidden="true"
         />
       </div>
 
-      <div className="flex items-end justify-between">
-        <div>
-          <h3 className={`text-2xl font-bold tracking-tight ${valueClass}`}>
+      {/* Content */}
+      <div className="flex items-end justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <p 
+            className={`text-2xl font-bold tracking-tight ${classes.title}`}
+            aria-label={`${card.label} value`}
+          >
             {card.value}
-          </h3>
+          </p>
 
-          <p className={`${trendColor} text-xs font-semibold mt-1 flex items-center gap-1`}>
+          <div 
+            className={`${trendColor} text-xs font-semibold mt-1 flex items-center gap-1`}
+            role="status"
+            aria-label={`${isUp ? 'Increased' : 'Decreased'} by ${card.change}`}
+          >
             <Icon
               name={isUp ? 'north' : 'south'}
               className="!text-xs"
+              aria-hidden="true"
             />
-            {card.change}
-          </p>
+            <span>{card.change}</span>
+          </div>
         </div>
 
-        <div className="w-20 h-10">
-          <SparklineSVG />
+        {/* Sparkline Chart */}
+        <div className="w-20 h-10 flex-shrink-0">
+          <SparklineSVG data={card.chartData} color={card.chartColor} />
         </div>
       </div>
-    </div>
+    </article>
   );
-};
+});
+
+KPICard.displayName = 'KPICard';

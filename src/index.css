@@ -38,3 +38,20 @@ body {
 input:focus {
   outline: none;
 }
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Números tabulares para alineación */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
