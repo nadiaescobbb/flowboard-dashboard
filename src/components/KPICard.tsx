@@ -1,4 +1,4 @@
-import { Icon } from './Icon';
+import { Icon } from '../../Icon';
 import { KPICard as KPICardType } from '../types';
 
 interface KPICardProps {

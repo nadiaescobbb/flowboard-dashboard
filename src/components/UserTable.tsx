@@ -1,5 +1,5 @@
 import { User } from '../types';
-import { Icon } from './Icon';
+import { Icon } from '../../Icon';
 
 interface UserTableProps {
   users: User[];

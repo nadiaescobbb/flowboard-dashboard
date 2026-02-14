@@ -1,5 +1,5 @@
 import { AcquisitionChannel } from '../types';
-import { Icon } from './Icon';
+import { Icon } from '../../Icon';
 
 interface AcquisitionChartProps {
   channels: AcquisitionChannel[];
