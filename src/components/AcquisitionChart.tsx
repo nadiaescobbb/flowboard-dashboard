@@ -1,4 +1,4 @@
-import { AcquisitionChannel } from '../types/index';
+import { AcquisitionChannel } from '../types';
 
 interface AcquisitionChartProps {
   channels: AcquisitionChannel[];
@@ -8,49 +8,62 @@ interface AcquisitionChartProps {
 export const AcquisitionChart = ({ channels, theme }: AcquisitionChartProps) => {
   const isLight = theme === 'light';
 
-  if (isLight) {
-    return (
-      <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-        <h3 className="font-bold text-slate-900 mb-1">User acquisition</h3>
-        <p className="text-sm text-slate-500 mb-8">Performance by channel</p>
-        <div className="space-y-6">
-          {channels.map((channel) => (
-            <div key={channel.name} className="space-y-2">
-              <div className="flex justify-between text-sm font-medium">
-                <span className="text-slate-700">{channel.name}</span>
-                <span className="text-slate-900">{channel.percentage}%</span>
-              </div>
-              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-primary rounded-full"
-                  style={{
-                    width: `${channel.percentage}%`,
-                    opacity: channel.opacity,
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const containerClass = isLight
+    ? 'bg-surface-light border-border-light'
+    : 'bg-surface-dark border-border-dark';
+
+  const titleClass = isLight
+    ? 'text-text-primary-light'
+    : 'text-white';
+
+  const subtitleClass = isLight
+    ? 'text-text-secondary-light'
+    : 'text-text-secondary-dark';
+
+  const labelClass = isLight
+    ? 'text-text-secondary-light'
+    : 'text-slate-400';
+
+  const valueClass = isLight
+    ? 'text-text-primary-light'
+    : 'text-white';
+
+  const progressBg = isLight
+    ? 'bg-gray-200'
+    : 'bg-white/5';
+
+  const buttonClass = isLight
+    ? 'bg-gray-100 border-border-light text-text-secondary-light hover:bg-gray-200'
+    : 'bg-white/5 border-border-dark text-slate-300 hover:bg-white/10 hover:text-white';
 
   return (
-    <div className="bg-surface-dark border border-border-dark rounded-xl p-6 flex flex-col">
+    <div className={`rounded-xl p-6 border flex flex-col ${containerClass}`}>
+      
+      {/* Header */}
       <div className="mb-8">
-        <h4 className="text-white font-semibold">Acquisition Sources</h4>
-        <p className="text-slate-500 text-xs mt-0.5">Top performing channels</p>
+        <h4 className={`font-semibold ${titleClass}`}>
+          Acquisition Sources
+        </h4>
+        <p className={`text-xs mt-0.5 ${subtitleClass}`}>
+          Top performing channels
+        </p>
       </div>
+
+      {/* Channels */}
       <div className="flex-1 flex flex-col justify-between">
         <div className="space-y-6">
           {channels.map((channel) => (
             <div key={channel.name}>
               <div className="flex justify-between text-xs mb-2">
-                <span className="text-slate-400">{channel.name}</span>
-                <span className="text-white font-medium">{channel.percentage}%</span>
+                <span className={`${labelClass}`}>
+                  {channel.name}
+                </span>
+                <span className={`font-medium ${valueClass}`}>
+                  {channel.percentage}%
+                </span>
               </div>
-              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+
+              <div className={`h-2 w-full rounded-full overflow-hidden ${progressBg}`}>
                 <div
                   className="h-full bg-primary rounded-full"
                   style={{
@@ -62,7 +75,10 @@ export const AcquisitionChart = ({ channels, theme }: AcquisitionChartProps) => 
             </div>
           ))}
         </div>
-        <button className="mt-8 w-full py-2 bg-white/5 border border-border-dark text-slate-300 rounded-lg text-sm font-medium hover:bg-white/10 hover:text-white transition-all">
+
+        <button
+          className={`mt-8 w-full py-2 border rounded-lg text-sm font-medium transition-all ${buttonClass}`}
+        >
           View Full Analytics
         </button>
       </div>
