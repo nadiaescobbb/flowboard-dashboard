@@ -5,10 +5,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 🔧 RESET PARA MOBILE */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html {
+  /* Prevenir scroll horizontal */
+  overflow-x: hidden;
+  /* Mejorar renderizado en móviles */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+#root {
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 .material-symbols-outlined {
@@ -39,7 +63,7 @@ input:focus {
   outline: none;
 }
 
-/* Animación de entrada */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -51,7 +75,46 @@ input:focus {
   }
 }
 
-/* Números tabulares para alineación */
+
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth scrolling solo en desktop */
+@media (min-width: 1024px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Fix para safe area en iPhone con notch */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
 }

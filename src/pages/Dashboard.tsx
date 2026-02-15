@@ -28,16 +28,16 @@ export const Dashboard = () => {
     <div className="flex min-h-screen">
       <Sidebar />
 
-      <main className="flex-1" role="main" aria-label="Dashboard content">
+      <main className="flex-1 min-w-0" role="main" aria-label="Dashboard content">
         <Header />
 
-        <div className="p-8 space-y-8">
+        <div className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
           {/* KPI Cards */}
           <section aria-labelledby="kpi-section-title">
             <h2 id="kpi-section-title" className="sr-only">
               Key Performance Indicators
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {data.kpiCards.map((card) => (
                 <KPICard key={card.id} card={card} />
               ))}
@@ -49,7 +49,7 @@ export const Dashboard = () => {
             <h2 id="charts-section-title" className="sr-only">
               Analytics Charts
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
               <RevenueChart data={data.revenueData} />
               <AcquisitionChart channels={data.channels} />
             </div>

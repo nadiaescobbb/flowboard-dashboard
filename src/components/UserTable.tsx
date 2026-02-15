@@ -191,7 +191,7 @@ export const UserTable = memo(({ users }: UserTableProps) => {
 
   // Componente de header de columna ordenable
   const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
-    <th className="px-6 py-4">
+    <th className="px-3 md:px-6 py-4">
       <button
         onClick={() => handleSort(field)}
         className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors focus:outline-none focus:text-primary group"
@@ -244,10 +244,10 @@ export const UserTable = memo(({ users }: UserTableProps) => {
     >
       
       {/* Header */}
-      <header className="p-6 border-b">
+      <header className="p-4 md:p-6 border-b">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
           <div>
-            <h3 id="users-table-title" className={`font-semibold ${classes.title}`}>
+            <h3 id="users-table-title" className={`text-base md:text-lg font-semibold ${classes.title}`}>
               Recent Users
             </h3>
             <p className={`text-xs mt-0.5 ${classes.subtitle}`}>
@@ -310,14 +310,14 @@ export const UserTable = memo(({ users }: UserTableProps) => {
             </p>
           </div>
         ) : (
-          <table className="w-full text-left">
+          <table className="w-full text-left min-w-[640px]">
             <thead className={tableHeadClass}>
               <tr>
-                <SortableHeader field="name">User Details</SortableHeader>
+                <SortableHeader field="name">User</SortableHeader>
                 <SortableHeader field="status">Status</SortableHeader>
                 <SortableHeader field="plan">Plan</SortableHeader>
-                <SortableHeader field="joinDate">Join Date</SortableHeader>
-                <th className="px-6 py-4">
+                <SortableHeader field="joinDate">Joined</SortableHeader>
+                <th className="px-3 md:px-6 py-4">
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
@@ -329,10 +329,10 @@ export const UserTable = memo(({ users }: UserTableProps) => {
                   key={user.id}
                   className={`transition-colors group ${classes.hover}`}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div 
-                        className={`size-9 rounded-full flex items-center justify-center overflow-hidden ${classes.isLight ? 'bg-slate-200' : 'bg-slate-800'}`}
+                        className={`size-9 rounded-full flex items-center justify-center overflow-hidden ${classes.isLight ? 'bg-slate-200' : 'bg-slate-800'} flex-shrink-0`}
                         role="img"
                         aria-label={`${user.name} avatar`}
                       >
@@ -357,7 +357,7 @@ export const UserTable = memo(({ users }: UserTableProps) => {
                     </div>
                   </td>
 
-                  <td className="px-6 py-4">
+                  <td className="px-3 md:px-6 py-4">
                     <span
                       className={`inline-flex px-2.5 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider ${getStatusColor(user.status)}`}
                       role="status"
@@ -367,19 +367,19 @@ export const UserTable = memo(({ users }: UserTableProps) => {
                     </span>
                   </td>
 
-                  <td className="px-6 py-4">
-                    <span className={`text-sm ${classes.subtitle}`}>
+                  <td className="px-3 md:px-6 py-4">
+                    <span className={`text-xs md:text-sm ${classes.subtitle}`}>
                       {user.plan}
                     </span>
                   </td>
 
-                  <td className="px-6 py-4">
-                    <span className={`text-sm ${classes.subtitle}`}>
+                  <td className="px-3 md:px-6 py-4">
+                    <span className={`text-xs md:text-sm ${classes.subtitle}`}>
                       {user.joinDate}
                     </span>
                   </td>
 
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-3 md:px-6 py-4 text-right">
                     <UserMenu
                       user={user}
                       onEdit={handleEditUser}
@@ -396,11 +396,11 @@ export const UserTable = memo(({ users }: UserTableProps) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <footer className="p-4 border-t flex items-center justify-between">
-          <p className={`text-sm ${classes.subtitle}`}>
+        <footer className="p-3 md:p-4 border-t flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className={`text-xs md:text-sm ${classes.subtitle}`}>
             Showing {((currentPage - 1) * itemsPerPage) + 1} to{' '}
             {Math.min(currentPage * itemsPerPage, filteredAndSortedUsers.length)} of{' '}
-            {filteredAndSortedUsers.length} users
+            {filteredAndSortedUsers.length}
           </p>
 
           <div className="flex gap-2">
@@ -426,7 +426,7 @@ export const UserTable = memo(({ users }: UserTableProps) => {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      className={`px-2 md:px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all ${
                         currentPage === page
                           ? classes.buttonActive
                           : classes.button

@@ -7,6 +7,7 @@ export const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +30,6 @@ export const Header = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Searching for:', searchQuery);
-    // Aquí irá la lógica de búsqueda real
   };
 
   const notificationBorder = classes.isLight
@@ -38,17 +38,20 @@ export const Header = () => {
 
   return (
     <header 
-      className={`h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 backdrop-blur-sm ${classes.surface}`}
+      className={`h-16 flex items-center justify-between px-4 md:px-8 border-b sticky top-0 z-30 backdrop-blur-sm ${classes.surface}`}
       role="banner"
     >
       
       {/* Left Section */}
-      <div className="flex items-center gap-6">
-        <h1 className={`text-lg font-semibold ${classes.title}`}>
+      <div className="flex items-center gap-3 md:gap-6 flex-1">
+        {/* Spacer para el botón de menú mobile */}
+        <div className="w-10 md:hidden"></div>
+        
+        <h1 className={`text-base md:text-lg font-semibold ${classes.title}`}>
           Dashboard
         </h1>
 
-        {/* Search Bar */}
+        {/* Search Bar - Desktop */}
         <form 
           onSubmit={handleSearch}
           className="relative max-w-md hidden lg:block"
@@ -75,8 +78,17 @@ export const Header = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         
+        {/* Mobile Search Button */}
+        <button
+          onClick={() => setShowMobileSearch(!showMobileSearch)}
+          className={`lg:hidden p-2 rounded-lg transition-colors ${classes.subtitle} hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50`}
+          aria-label="Search"
+        >
+          <Icon name="search" aria-hidden="true" />
+        </button>
+
         {/* Notifications */}
         <div className="relative" ref={notificationRef}>
           <button 
@@ -97,12 +109,12 @@ export const Header = () => {
           {/* Notifications Dropdown */}
           {showNotifications && (
             <div 
-              className={`absolute right-0 mt-2 w-80 rounded-xl border shadow-lg overflow-hidden ${classes.surface}`}
+              className={`absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-xl border shadow-lg overflow-hidden ${classes.surface}`}
               role="menu"
               aria-label="Notifications menu"
             >
               <div className="p-4 border-b">
-                <h3 className={`font-semibold ${classes.title}`}>Notifications</h3>
+                <h3 className={`font-semibold text-sm md:text-base ${classes.title}`}>Notifications</h3>
                 <p className={`text-xs mt-0.5 ${classes.subtitle}`}>You have 3 unread messages</p>
               </div>
               <div className="max-h-96 overflow-y-auto">
@@ -144,13 +156,14 @@ export const Header = () => {
           )}
         </div>
 
-        <div className={`h-8 w-px mx-1 ${classes.divider}`} role="separator"></div>
+        {/* Divider - Hidden on mobile */}
+        <div className={`hidden md:block h-8 w-px mx-1 ${classes.divider}`} role="separator"></div>
 
         {/* User Menu */}
         <div className="relative" ref={userMenuRef}>
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
-            className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg p-1 -m-1"
+            className="flex items-center gap-2 md:gap-3 group focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg p-1 -m-1"
             aria-label="User menu"
             aria-expanded={showUserMenu}
             aria-haspopup="true"
@@ -160,12 +173,12 @@ export const Header = () => {
                 Alex Rivera
               </p>
               <p className={`text-[11px] mt-1 ${classes.subtitle}`}>
-                Admin Account
+                Admin
               </p>
             </div>
 
             <div
-              className={`size-9 rounded-full bg-center bg-cover border transition-all ${
+              className={`size-8 md:size-9 rounded-full bg-center bg-cover border transition-all ${
                 classes.isLight ? 'border-border-light' : 'border-border-dark'
               } group-hover:border-primary/50`}
               style={{
@@ -220,6 +233,27 @@ export const Header = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Search Overlay */}
+      {showMobileSearch && (
+        <div className="lg:hidden fixed inset-x-0 top-16 p-4 bg-white dark:bg-surface-dark border-b z-20">
+          <form onSubmit={handleSearch} className="relative">
+            <Icon
+              name="search"
+              className={`absolute left-3 top-1/2 -translate-y-1/2 ${classes.subtitle} !text-xl pointer-events-none`}
+              aria-hidden="true"
+            />
+            <input
+              type="search"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`w-full rounded-lg pl-10 pr-4 py-2 text-sm border focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${classes.input}`}
+              autoFocus
+            />
+          </form>
+        </div>
+      )}
     </header>
   );
 };

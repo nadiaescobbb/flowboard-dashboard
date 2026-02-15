@@ -38,6 +38,7 @@ const SparklineSVG = memo(({ data, color }: SparklineSVGProps) => {
       viewBox="0 0 100 40"
       role="img"
       aria-label="Trend chart"
+      preserveAspectRatio="none"
     >
       <path
         d={pathData}
@@ -45,6 +46,7 @@ const SparklineSVG = memo(({ data, color }: SparklineSVGProps) => {
         stroke={color}
         strokeLinecap="round"
         strokeWidth="2"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );
@@ -67,31 +69,31 @@ export const KPICard = memo(({ card }: KPICardProps) => {
 
   return (
     <article 
-      className={`rounded-xl p-5 border transition-all group hover:border-primary/30 hover:shadow-lg ${classes.surface}`}
+      className={`rounded-xl p-4 md:p-5 border transition-all group hover:border-primary/30 hover:shadow-lg ${classes.surface}`}
       aria-labelledby={`kpi-${card.id}-label`}
     >
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3 md:mb-4">
         <h3 
           id={`kpi-${card.id}-label`}
-          className={`text-sm font-medium ${classes.subtitle}`}
+          className={`text-xs md:text-sm font-medium ${classes.subtitle}`}
         >
           {card.label}
         </h3>
 
         <Icon
           name={iconName}
-          className="text-primary !text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          className="text-primary !text-lg md:!text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
           aria-hidden="true"
         />
       </div>
 
       {/* Content */}
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex items-end justify-between gap-3 md:gap-4">
         <div className="flex-1 min-w-0">
           <p 
-            className={`text-2xl font-bold tracking-tight ${classes.title}`}
+            className={`text-xl md:text-2xl font-bold tracking-tight ${classes.title}`}
             aria-label={`${card.label} value`}
           >
             {card.value}
@@ -112,7 +114,7 @@ export const KPICard = memo(({ card }: KPICardProps) => {
         </div>
 
         {/* Sparkline Chart */}
-        <div className="w-20 h-10 flex-shrink-0">
+        <div className="w-16 h-8 md:w-20 md:h-10 flex-shrink-0">
           <SparklineSVG data={card.chartData} color={card.chartColor} />
         </div>
       </div>

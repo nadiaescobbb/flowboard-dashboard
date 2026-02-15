@@ -26,11 +26,11 @@ const ProgressBar = memo(({ channel, index, labelClass, valueClass, progressBg }
       }}
     >
       <div className="flex justify-between items-center text-xs mb-2">
-        <span className={`${labelClass} font-medium`}>
+        <span className={`${labelClass} font-medium truncate pr-2`}>
           {channel.name}
         </span>
         <span 
-          className={`font-bold ${valueClass} tabular-nums`}
+          className={`font-bold ${valueClass} tabular-nums flex-shrink-0`}
           aria-label={`${channel.percentage} percent`}
         >
           {channel.percentage}%
@@ -83,12 +83,12 @@ export const AcquisitionChart = memo(({ channels }: AcquisitionChartProps) => {
   if (sortedChannels.length === 0) {
     return (
       <div 
-        className={`rounded-xl p-6 border flex items-center justify-center min-h-[400px] ${classes.surface}`}
+        className={`rounded-xl p-4 md:p-6 border flex items-center justify-center min-h-[300px] md:min-h-[400px] ${classes.surface}`}
         role="status"
         aria-label="No acquisition data available"
       >
         <div className="text-center">
-          <div className={`text-4xl mb-3 ${classes.subtitle}`}>📊</div>
+          <div className={`text-3xl md:text-4xl mb-3 ${classes.subtitle}`}>📊</div>
           <p className={`text-sm font-medium ${classes.title}`}>No Data Available</p>
           <p className={`text-xs mt-1 ${classes.subtitle}`}>
             Acquisition sources will appear here
@@ -100,15 +100,15 @@ export const AcquisitionChart = memo(({ channels }: AcquisitionChartProps) => {
 
   return (
     <article 
-      className={`rounded-xl p-6 border flex flex-col ${classes.surface}`}
+      className={`rounded-xl p-4 md:p-6 border flex flex-col ${classes.surface}`}
       aria-labelledby="acquisition-chart-title"
     >
       
       {/* Header */}
-      <header className="mb-8">
+      <header className="mb-6 md:mb-8">
         <h3 
           id="acquisition-chart-title"
-          className={`font-semibold ${classes.title}`}
+          className={`text-base md:text-lg font-semibold ${classes.title}`}
         >
           Acquisition Sources
         </h3>
@@ -120,7 +120,7 @@ export const AcquisitionChart = memo(({ channels }: AcquisitionChartProps) => {
       {/* Channels */}
       <div className="flex-1 flex flex-col justify-between">
         <div 
-          className="space-y-6"
+          className="space-y-5 md:space-y-6"
           role="list"
           aria-label="Acquisition channels breakdown"
         >
@@ -139,7 +139,7 @@ export const AcquisitionChart = memo(({ channels }: AcquisitionChartProps) => {
         {/* Call to Action Button */}
         <button
           onClick={() => console.log('View full analytics', sortedChannels)}
-          className={`mt-8 w-full py-2.5 border rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 ${classes.button} hover:scale-[1.02]`}
+          className={`mt-6 md:mt-8 w-full py-2.5 border rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-[0.98] touch-manipulation ${classes.button} hover:scale-[1.02]`}
           aria-label="View detailed analytics for all acquisition sources"
         >
           View Full Analytics
